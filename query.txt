@@ -1,0 +1,45 @@
+
+
+
+1)
+db.product_list.find({}).toArray()
+
+2)
+db.product_list.find({product_price:{$gte:400,$lte:800}})
+
+3)
+db.product_list.find({product_price:{$not:{$gte:400,$lte:600}}}).toArray()
+
+4)
+db.product_list.find({product_price:{$gte:500}})
+
+5)
+db.product_list.find({},{_id:0 , id:0 , product_price:0 , product_color:0})
+
+6)
+db.product_list.findOne({id:'10'})
+
+7)
+db.product_list.find({},{_id:0 , id:0 , product_price:0 , product_color:0})
+
+8)
+db.product_list.find({product_material:'Soft'})
+
+9)
+db.product_list.find({$and:[{product_color:'indigo'},{product_price:492.00}]})
+
+10)
+
+db.product_list.aggregate([
+
+{ $group : {
+_id:{price:"$price"} , 
+"count":{$sum : 1},
+duplicate:{$addToSet:"$price"}
+} },
+
+{$match : {count:{$gt:1}}}
+
+]).forEach(function(a){
+db.example.deleteOne({"price":a.duplicate})
+})
